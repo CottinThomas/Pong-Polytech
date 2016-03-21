@@ -1,0 +1,83 @@
+package org.polytech.pong.launcher;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JPanel;
+
+import org.polytech.pong.Application;
+import org.polytech.pong.Board;
+import org.polytech.pong.ui.CustomJButton;
+import org.polytech.pong.ui.CustomJTextField;
+
+/**
+ * View to join a hosted game
+ * @author Clément
+ *
+ */
+public class JoinBoard extends Board {
+	
+	private static final long serialVersionUID = 1L;
+
+	public JoinBoard(Application application) {
+		super(application);
+		
+		initMMI();
+	}
+	
+	private void initMMI()
+	{
+		setLayout(new BorderLayout());
+
+		// Main pane configuration
+		JPanel pnl_mainPanel = new JPanel();
+		GridBagLayout gridbag = new GridBagLayout();
+	    GridBagConstraints constraints = new GridBagConstraints();
+	    constraints.fill = GridBagConstraints.CENTER;
+	    gridbag.setConstraints(pnl_mainPanel, constraints);
+	    pnl_mainPanel.setLayout(gridbag);
+	    pnl_mainPanel.setBackground(Color.BLACK);
+	    
+	    // Textfield
+	    constraints.fill = GridBagConstraints.HORIZONTAL;
+	    constraints.weightx = 0.5;
+	    constraints.gridx = 0;
+	    constraints.gridy = 0;
+	    constraints.insets = new Insets(7, 7, 7, 7);
+	    CustomJTextField btn_host = new CustomJTextField("127.0.0.1");
+	    pnl_mainPanel.add(btn_host, constraints);
+	    
+	    // Join button
+	    constraints.fill = GridBagConstraints.HORIZONTAL;
+	    constraints.weightx = 0.1;
+	    constraints.gridx = 1;
+	    constraints.gridy = 0;
+	    constraints.insets = new Insets(7, 7, 7, 7);
+	    CustomJButton btn_join = new CustomJButton("JOIN");
+	    pnl_mainPanel.add(btn_join, constraints);
+	    
+	    // Back button
+	    constraints.fill = GridBagConstraints.CENTER;
+	    constraints.weightx = 0.1;
+	    constraints.gridx = 0;
+	    constraints.gridy = 2;
+	    constraints.gridwidth = 2;
+	    constraints.insets = new Insets(50, 7, 7, 7);
+	    CustomJButton btn_back = new CustomJButton("< BACK");
+	    btn_back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				application.switchBoard(application.getPreviousBoard());
+			}
+		});
+	    pnl_mainPanel.add(btn_back, constraints);
+
+	    add(pnl_mainPanel, BorderLayout.CENTER);
+	}
+}
