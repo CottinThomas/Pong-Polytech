@@ -1,6 +1,7 @@
 package org.polytech.pong.ui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -22,6 +23,7 @@ public class CustomJButton extends JButton {
         setFocusPainted(false);
 	    setBackground(Color.BLACK);
 	    setForeground(Color.WHITE);
+	    setCursor(new Cursor(Cursor.HAND_CURSOR));
 	    setFont(new Font("SansSerif", Font.BOLD, 20));
 	    setBorder(BorderFactory.createCompoundBorder(
 	               BorderFactory.createLineBorder(Color.WHITE, 5),

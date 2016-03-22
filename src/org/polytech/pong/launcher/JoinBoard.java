@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import org.polytech.pong.Application;
 import org.polytech.pong.Board;
+import org.polytech.pong.game.WaitingPlayerBoard;
 import org.polytech.pong.ui.CustomJButton;
 import org.polytech.pong.ui.CustomJTextField;
 
@@ -49,8 +50,8 @@ public class JoinBoard extends Board {
 	    constraints.gridx = 0;
 	    constraints.gridy = 0;
 	    constraints.insets = new Insets(7, 7, 7, 7);
-	    CustomJTextField btn_host = new CustomJTextField("127.0.0.1");
-	    pnl_mainPanel.add(btn_host, constraints);
+	    CustomJTextField txf_hostIp = new CustomJTextField("127.0.0.1");
+	    pnl_mainPanel.add(txf_hostIp, constraints);
 	    
 	    // Join button
 	    constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -59,6 +60,13 @@ public class JoinBoard extends Board {
 	    constraints.gridy = 0;
 	    constraints.insets = new Insets(7, 7, 7, 7);
 	    CustomJButton btn_join = new CustomJButton("JOIN");
+	    btn_join.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				application.switchBoard(new WaitingPlayerBoard(application, txf_hostIp.getText()));
+			}
+		});
 	    pnl_mainPanel.add(btn_join, constraints);
 	    
 	    // Back button
@@ -73,7 +81,7 @@ public class JoinBoard extends Board {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				application.switchBoard(application.getPreviousBoard());
+				application.switchBoard(new LauncherBoard(application));
 			}
 		});
 	    pnl_mainPanel.add(btn_back, constraints);
