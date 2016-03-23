@@ -1,4 +1,4 @@
-package org.polytech.pong;
+package com.polytech.pong;
 
 import java.awt.Color;
 import java.awt.Dimension;

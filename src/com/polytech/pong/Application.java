@@ -1,11 +1,11 @@
-package org.polytech.pong;
+package com.polytech.pong;
 
 import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import org.polytech.pong.launcher.LauncherBoard;
+import com.polytech.pong.launcher.LauncherBoard;
 
 /**
  * Main class. Contain "board" to display game content
@@ -17,6 +17,8 @@ public class Application extends JFrame{
 
 	public static final int GAME_CONTENT_WIDTH = 660;
 	public static final int GAME_CONTENT_HEIGHT = 500;
+	public static final int GAME_LEFT_DIRECTION = -1;
+	public static final int GAME_RIGHT_DIRECTION = 1;
 	private Board currentBoard;
 	private Board previousBoard;
 	

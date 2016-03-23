@@ -1,4 +1,4 @@
-package org.polytech.pong.game;
+package com.polytech.pong.game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,9 +12,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.polytech.pong.Application;
-import org.polytech.pong.Board;
-import org.polytech.pong.ui.CustomJButton;
+import com.polytech.pong.Application;
+import com.polytech.pong.Board;
+import com.polytech.pong.ui.CustomJButton;
 
 public class WaitingPlayerBoard extends Board {
 

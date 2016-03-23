@@ -1,4 +1,4 @@
-package org.polytech.pong.launcher;
+package com.polytech.pong.launcher;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,11 +16,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.polytech.pong.Application;
-import org.polytech.pong.Board;
-import org.polytech.pong.game.GameBoard;
-import org.polytech.pong.game.WaitingPlayerBoard;
-import org.polytech.pong.ui.CustomJButton;
+import com.polytech.pong.Application;
+import com.polytech.pong.Board;
+import com.polytech.pong.game.WaitingPlayerBoard;
+import com.polytech.pong.ui.CustomJButton;
 
 /**
  * Main application view
@@ -59,7 +58,7 @@ public class LauncherBoard extends Board {
 			constraints.gridx = 0;
 			constraints.gridy = 0;
 			constraints.gridwidth = 3;
-			pongLogo = ImageIO.read(this.getClass().getResource("/org/polytech/pong/resources/logo.png"));
+			pongLogo = ImageIO.read(this.getClass().getResource("/com/polytech/pong/resources/logo.png"));
 			JLabel picLabel = new JLabel(new ImageIcon(pongLogo));
 			pnl_mainPanel.add(picLabel, constraints);
 

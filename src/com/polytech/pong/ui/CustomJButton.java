@@ -1,4 +1,4 @@
-package org.polytech.pong.ui;
+package com.polytech.pong.ui;
 
 import java.awt.Color;
 import java.awt.Cursor;

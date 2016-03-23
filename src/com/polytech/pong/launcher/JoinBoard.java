@@ -1,4 +1,4 @@
-package org.polytech.pong.launcher;
+package com.polytech.pong.launcher;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,11 +10,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
-import org.polytech.pong.Application;
-import org.polytech.pong.Board;
-import org.polytech.pong.game.WaitingPlayerBoard;
-import org.polytech.pong.ui.CustomJButton;
-import org.polytech.pong.ui.CustomJTextField;
+import com.polytech.pong.Application;
+import com.polytech.pong.Board;
+import com.polytech.pong.game.WaitingPlayerBoard;
+import com.polytech.pong.ui.CustomJButton;
+import com.polytech.pong.ui.CustomJTextField;
 
 /**
  * View to join a hosted game
