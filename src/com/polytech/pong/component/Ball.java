@@ -24,6 +24,7 @@ public class Ball {
 	private int direction;
 	private EAngle angle;
 	private int speed;
+	private double tranlateY;
 
 	/**
 	 * Create object
@@ -48,10 +49,10 @@ public class Ball {
 		case CENTER:
 			break;
 		case NORTH:
-			position.y -= speed;
+			position.y -= tranlateY;
 			break;
 		case SOUTH:
-			position.y += speed;
+			position.y += tranlateY;
 			break;
 		default:
 			break;
@@ -78,6 +79,9 @@ public class Ball {
 		} else {
 			this.direction = -1;
 		}
+		
+		// Generate new y translation used in the move() method
+		tranlateY = Math.random() * (5 - 2);
 	}
 
 	public void setSpeed(int newSpeed) {
@@ -94,27 +98,16 @@ public class Ball {
 		this.angle = angle;
 	}
 
-	public EAngle reverseAngle() {
-
-		switch (angle) {
-		case CENTER:
-			angle = EAngle.CENTER;
-			break;
-		case SOUTH:
-			angle = EAngle.NORTH;
-			break;
-		case NORTH:
-			angle = EAngle.SOUTH;
-			break;
-		default:
-			break;
-		}
-
-		return angle;
-	}
-
 	public Point getPosition() {
 		return position;
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public EAngle getAngle() {
+		return angle;
 	}
 
 	/**

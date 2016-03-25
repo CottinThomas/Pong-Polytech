@@ -43,11 +43,11 @@ public class Paddle {
 				   paddleRec.height + paddleRec.y > objectRec.y) 
 		{
 			
-			if(objectRec.y < paddleRec.y + PADDLE_HEIGHT/3)
+			if(objectRec.y < paddleRec.y + (PADDLE_HEIGHT/5)*2)
 			{
 				return EColision.TOP;
 			}
-			else if(objectRec.y > paddleRec.y + (PADDLE_HEIGHT/3 * 2))
+			else if(objectRec.y > paddleRec.y + (PADDLE_HEIGHT/5)* 3)
 			{
 				return EColision.BOTTOM;
 			}

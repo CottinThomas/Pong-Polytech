@@ -36,6 +36,7 @@ public class GameBoard extends Board {
 
 	public GameBoard(Application application, boolean isHost) {
 		super(application);
+		
 		setBackground(Color.BLACK);
 		setLayout(null);
 		
@@ -182,11 +183,17 @@ public class GameBoard extends Board {
 	}
 
 	private void manageEdgeCollision(Point ballPosition) {
+		
 		// Top & bottom
-		if (ballPosition.y - Ball.BALLE_SIZE / 2 <= 0
-				|| ballPosition.y + Ball.BALLE_SIZE / 2 >= Application.GAME_CONTENT_HEIGHT) {
-			ball.reverseAngle();
+		if ((ballPosition.y - Ball.BALLE_SIZE / 2 <= 0))
+		{
+			ball.setAngle(EAngle.SOUTH);
 		}
+		else if (ballPosition.y + Ball.BALLE_SIZE / 2 >= Application.GAME_CONTENT_HEIGHT)
+		{
+			ball.setAngle(EAngle.NORTH);
+		}
+
 
 		// TODO : if point, reset ball + notification
 		if (ballPosition.x - Ball.BALLE_SIZE / 2 <= 0) {
