@@ -3,6 +3,7 @@ package com.polytech.pong.component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.StringJoiner;
 
 /**
  * Ball implementation
@@ -10,15 +11,13 @@ import java.awt.Rectangle;
  * @author Clément
  *
  */
-public class Ball
-{
+public class Ball {
 
 	public static final int BALLE_SIZE = 15;
 	private static final int MIN_SPEAD = 7;
 	private static final int MAX_SPEAD = 25;
 
-	public static enum EAngle
-	{
+	public static enum EAngle {
 		SOUTH, CENTER, NORTH
 	};
 
@@ -35,8 +34,7 @@ public class Ball
 	 *            initial ball position. Note : the position point is the ball
 	 *            center.
 	 */
-	public Ball(Point position)
-	{
+	public Ball(Point position) {
 		this.position = position;
 		direction = -1;
 		angle = EAngle.CENTER;
@@ -47,12 +45,10 @@ public class Ball
 	/**
 	 * Compute the ball new position depending on ball direction and angle
 	 */
-	public void move()
-	{
+	public void move() {
 
 		position.x += direction * speed;
-		switch (angle)
-		{
+		switch (angle) {
 		case CENTER:
 			break;
 		case NORTH:
@@ -72,23 +68,18 @@ public class Ball
 	 * 
 	 * @return Rectangle
 	 */
-	public Rectangle getRectangleRepresentation()
-	{
+	public Rectangle getRectangleRepresentation() {
 		return new Rectangle(getTopLeftPoint(), new Dimension(BALLE_SIZE, BALLE_SIZE));
 	}
 
-	public void setPosition(Point newPosition)
-	{
+	public void setPosition(Point newPosition) {
 		position = newPosition;
 	}
 
-	public void setDirection(int direction)
-	{
-		if (direction >= 0)
-		{
+	public void setDirection(int direction) {
+		if (direction >= 0) {
 			this.direction = 1;
-		} else
-		{
+		} else {
 			this.direction = -1;
 		}
 
@@ -96,43 +87,34 @@ public class Ball
 		tranlateY = Math.random() * (5 - 2) + 1;
 	}
 
-	public void setSpeed(int newSpeed)
-	{
-		if (newSpeed <= MIN_SPEAD)
-		{
+	public void setSpeed(int newSpeed) {
+		if (newSpeed <= MIN_SPEAD) {
 			speed = MIN_SPEAD;
-		} else if (newSpeed > MAX_SPEAD)
-		{
+		} else if (newSpeed > MAX_SPEAD) {
 			speed = MAX_SPEAD;
-		} else
-		{
+		} else {
 			speed = newSpeed;
 		}
 	}
 
-	public void setAngle(EAngle angle)
-	{
+	public void setAngle(EAngle angle) {
 		this.angle = angle;
 	}
 
-	public void setAngle(EAngle angle, double tranlation)
-	{
+	public void setAngle(EAngle angle, double tranlation) {
 		this.angle = angle;
 		this.tranlateY = tranlation;
 	}
 
-	public Point getPosition()
-	{
+	public Point getPosition() {
 		return position;
 	}
 
-	public int getDirection()
-	{
+	public int getDirection() {
 		return direction;
 	}
 
-	public EAngle getAngle()
-	{
+	public EAngle getAngle() {
 		return angle;
 	}
 
@@ -142,8 +124,15 @@ public class Ball
 	 * 
 	 * @return Ball top left point
 	 */
-	private Point getTopLeftPoint()
-	{
+	private Point getTopLeftPoint() {
 		return new Point(position.x - BALLE_SIZE / 2, position.y - BALLE_SIZE / 2);
+	}
+	
+	@Override
+	public String toString(){
+		StringJoiner joiner = new StringJoiner("-");
+		joiner.add(""+position.x).add(""+position.y).add(""+direction).add(angle.toString()).add(""+speed).add(""+tranlateY);
+		return joiner.toString();
+		
 	}
 }

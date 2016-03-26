@@ -14,6 +14,8 @@ import com.polytech.pong.launcher.LauncherBoard;
  */
 @SuppressWarnings("serial")
 public class Application extends JFrame{
+	
+	public static final GameStatus STATUS = GameStatus.DEBUG;
 
 	public static final int GAME_CONTENT_WIDTH = 660;
 	public static final int GAME_CONTENT_HEIGHT = 500;

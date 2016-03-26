@@ -3,6 +3,7 @@ package com.polytech.pong.component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.StringJoiner;
 
 /**
  * Paddle implementation
@@ -128,6 +129,13 @@ public class Paddle
 	private Point getTopLeftPoint()
 	{
 		return new Point(position.x - PADDLE_WIDTH / 2, position.y - PADDLE_HEIGHT / 2);
+	}
+	
+	@Override
+	public String toString(){
+		StringJoiner joiner = new StringJoiner("-");
+		joiner.add(""+position.x).add(""+position.y);
+		return joiner.toString();
 	}
 
 }
