@@ -1,4 +1,4 @@
-package com.polytech.pong.launcher;
+package com.polytech.pong.board.launcher;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,8 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.polytech.pong.Application;
-import com.polytech.pong.Board;
-import com.polytech.pong.game.WaitingPlayerBoard;
+import com.polytech.pong.board.ABoard;
+import com.polytech.pong.board.game.WaitingPlayerBoard;
 import com.polytech.pong.ui.CustomJButton;
 
 /**
@@ -27,7 +27,7 @@ import com.polytech.pong.ui.CustomJButton;
  * @author Clément
  *
  */
-public class LauncherBoard extends Board {
+public class LauncherBoard extends ABoard {
 
 	private static final long serialVersionUID = 1L;
 
@@ -80,7 +80,7 @@ public class LauncherBoard extends Board {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				application.switchBoard(new WaitingPlayerBoard(application));
+				application.switchBoard(new WaitingPlayerBoard(application, null));
 			}
 		});
 		pnl_mainPanel.add(btn_host, constraints);

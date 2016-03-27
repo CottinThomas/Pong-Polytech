@@ -1,9 +1,11 @@
-package com.polytech.pong;
+package com.polytech.pong.board;
 
 import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
+
+import com.polytech.pong.Application;
 
 /**
  * A board represent a game screen (ex. launcher, menu, game, etc).
@@ -12,11 +14,11 @@ import javax.swing.JPanel;
  *
  */
 @SuppressWarnings("serial")
-public abstract class Board extends JPanel{
+public abstract class ABoard extends JPanel{
 
 	protected Application application;
 	
-	public Board(Application application) {
+	public ABoard(Application application) {
 		this.application = application;
 		this.setPreferredSize(new Dimension(Application.GAME_CONTENT_WIDTH, Application.GAME_CONTENT_HEIGHT));
 	}

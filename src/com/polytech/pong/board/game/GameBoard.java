@@ -1,4 +1,4 @@
-package com.polytech.pong.game;
+package com.polytech.pong.board.game;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -16,15 +16,16 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import com.polytech.pong.Application;
-import com.polytech.pong.Board;
+import com.polytech.pong.board.ABoard;
 import com.polytech.pong.component.Ball;
-import com.polytech.pong.component.Paddle;
 import com.polytech.pong.component.Ball.EAngle;
+import com.polytech.pong.component.Paddle;
 
 // TODO : Mirror ball position for the opponent ?
+// TODO : Transmit server received information;
 
 @SuppressWarnings("serial")
-public class GameBoard extends Board
+public class GameBoard extends ABoard
 {
 
 	private Paddle playerPaddle;
@@ -34,7 +35,7 @@ public class GameBoard extends Board
 	private JLabel playerScore;
 	private JLabel opponentScore;
 
-	public GameBoard(Application application, boolean isHost)
+	public GameBoard(Application application)
 	{
 		super(application);
 
@@ -85,11 +86,9 @@ public class GameBoard extends Board
 	public static void main(String[] args)
 	{
 		Application application = new Application();
-		application.switchBoard(new GameBoard(application, true));
-		application.setVisible(true);
-
-		System.err.println(application.getSize());
-		System.err.println(application.getCurrentBoard().getSize());
+		application.switchBoard(new GameBoard(application));
+		
+		
 
 	}
 
@@ -150,7 +149,13 @@ public class GameBoard extends Board
 		ActionListener animate = new ActionListener() {
 			public void actionPerformed(ActionEvent ae)
 			{
-				computeAnimations(); // TODO : if this is the host
+				// TODO : Remove after server implementation
+//				if(application.getServerHandler().isServerHost())
+//				{
+//					computeAnimations();
+//				}
+				
+				computeAnimations();
 				repaint();
 			}
 		};

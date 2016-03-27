@@ -5,7 +5,9 @@ import java.awt.Insets;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import com.polytech.pong.launcher.LauncherBoard;
+import com.polytech.pong.board.ABoard;
+import com.polytech.pong.board.launcher.LauncherBoard;
+
 
 /**
  * Main class. Contain "board" to display game content
@@ -19,16 +21,19 @@ public class Application extends JFrame{
 	public static final int GAME_CONTENT_HEIGHT = 500;
 	public static final int GAME_LEFT_DIRECTION = -1;
 	public static final int GAME_RIGHT_DIRECTION = 1;
-	private Board currentBoard;
-	private Board previousBoard;
+	
+	private ServerHandler serverHandler;
+	private ABoard currentBoard;
+	private ABoard previousBoard;
 	
 	public Application() {
+		serverHandler = new ServerHandler(this);
 		initMMI();
 	}
 	
 	private void initMMI()
 	{
-		setSize(GAME_CONTENT_WIDTH, GAME_CONTENT_HEIGHT); // Expected size (false due to windows border)
+		setSize(GAME_CONTENT_WIDTH, GAME_CONTENT_HEIGHT); // Expected size (false due to windows borders)
 		setTitle("Pong | Polytech APP3-INFO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -56,7 +61,7 @@ public class Application extends JFrame{
 		return getContentPane().getHeight();
 	}
 	
-	public void switchBoard(Board board)
+	public void switchBoard(ABoard board)
 	{
 		previousBoard = currentBoard;
 		currentBoard = board;
@@ -67,11 +72,16 @@ public class Application extends JFrame{
 		SwingUtilities.updateComponentTreeUI(this);
 	}
 	
-	public Board getCurrentBoard() {
+	public ServerHandler getServerHandler()
+	{
+		return serverHandler;
+	}
+	
+	public ABoard getCurrentBoard() {
 		return currentBoard;
 	}
 	
-	public Board getPreviousBoard() {
+	public ABoard getPreviousBoard() {
 		return previousBoard;
 	}
 	
