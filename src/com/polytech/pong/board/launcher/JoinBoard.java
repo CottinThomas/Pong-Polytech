@@ -1,4 +1,4 @@
-package com.polytech.pong.launcher;
+package com.polytech.pong.board.launcher;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 import com.polytech.pong.Application;
-import com.polytech.pong.Board;
-import com.polytech.pong.game.WaitingPlayerBoard;
+import com.polytech.pong.board.ABoard;
+import com.polytech.pong.board.game.WaitingPlayerBoard;
 import com.polytech.pong.ui.CustomJButton;
 import com.polytech.pong.ui.CustomJTextField;
 
@@ -21,7 +21,7 @@ import com.polytech.pong.ui.CustomJTextField;
  * @author Clément
  *
  */
-public class JoinBoard extends Board {
+public class JoinBoard extends ABoard {
 	
 	private static final long serialVersionUID = 1L;
 

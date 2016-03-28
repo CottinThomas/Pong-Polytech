@@ -1,4 +1,4 @@
-package com.polytech.pong.game;
+package com.polytech.pong.board.game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.polytech.pong.Application;
-import com.polytech.pong.Board;
+import com.polytech.pong.board.ABoard;
 import com.polytech.pong.ui.CustomJButton;
 
-public class WaitingPlayerBoard extends Board {
+public class WaitingPlayerBoard extends ABoard {
 
 	private static final long serialVersionUID = 1L;
 	private static final String HOST_WAITING_TEXT = "Waiting for another player";
@@ -25,27 +25,25 @@ public class WaitingPlayerBoard extends Board {
 	private Thread waitingThread;
 	private JLabel lbl_waiting;
 	private String waitingText;
-	private boolean isHost;
 	private String hostIp;
 
-	// Host constructor
-	public WaitingPlayerBoard(Application application) {
+	public WaitingPlayerBoard(Application application, String ip) {
 		super(application);
-		isHost = true;
-		hostIp = null;
-		waitingText = HOST_WAITING_TEXT;
-
-		initMMI();
-		launchWaitingThread();
-
-	}
-	
-	// Slave constructor
-	public WaitingPlayerBoard(Application application, String hostIp) {
-		super(application);
-		this.hostIp = hostIp;
-		isHost = false;
-		waitingText = SLAVE_WAITING_TEXT;
+		hostIp = ip;
+		
+		// host
+		if(ip == null || ip.isEmpty())
+		{
+			waitingText = HOST_WAITING_TEXT;
+			hostIp = application.getServerHandler().createServer();
+		}
+		// slave
+		else
+		{
+			waitingText = SLAVE_WAITING_TEXT;
+			application.getServerHandler().createServer(ip);
+		}
+		
 
 		initMMI();
 		launchWaitingThread();
@@ -74,14 +72,12 @@ public class WaitingPlayerBoard extends Board {
 		lbl_waiting.setForeground(Color.WHITE);
 		pnl_mainPanel.add(lbl_waiting, constraints);
 
-		
-
-		if (isHost) {
+		if (application.getServerHandler().isServerHost()) {
 			constraints.fill = GridBagConstraints.CENTER;
 			constraints.weightx = 0.5;
 			constraints.gridx = 0;
 			constraints.gridy = 1;
-			JLabel lbl_ip = new JLabel("Hosting on address : 127.0.0.1"); // TODO : set true address
+			JLabel lbl_ip = new JLabel("Hosting on address : " + hostIp); 
 			lbl_ip.setForeground(Color.WHITE);
 			pnl_mainPanel.add(lbl_ip, constraints);
 		}
@@ -119,8 +115,7 @@ public class WaitingPlayerBoard extends Board {
 			public void run() {
 
 				try {
-					// Infinit loop while
-					while (true) {
+					while (!application.getServerHandler().isServerConnected()) {
 						lbl_waiting.setText(waitingText + "    ");
 						Thread.sleep(500);
 						lbl_waiting.setText(waitingText + " .  ");
@@ -130,29 +125,16 @@ public class WaitingPlayerBoard extends Board {
 						lbl_waiting.setText(waitingText + " ...");
 						Thread.sleep(500);
 					}
+					
+					application.switchBoard(new GameBoard(application));
 				} catch (InterruptedException e) {
+					System.err.println(e);
 				}
-
 			}
 		});
 
 		waitingThread.start();
 	}
 
-	private void launchServer() {
-		// TODO : Launch server (need handler ?)
-		// TODO : Subscribe playerJoin & invoke startGame()
-	}
 
-	private void startGame() {
-		// Stopping thread
-		if (waitingThread != null && waitingThread.isAlive())
-			;
-		{
-			waitingThread.interrupt();
-		}
-
-		application.switchBoard(new GameBoard(application, isHost));
-
-	}
 }
