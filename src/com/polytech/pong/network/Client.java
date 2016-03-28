@@ -10,7 +10,7 @@ public class Client extends NetObject{
 		try{
 			connectionSocket = new Socket(serverIp, 8095);
 		} catch (IOException e) {
-			System.out.println("IO exception. Aborted. Details:");
+			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
         }
 	}

@@ -15,7 +15,7 @@ public class Server extends NetObject {
 			connectionSocket = serverSocket.accept();
 			super.debug("Estabished connection.");
 		} catch (IOException e){
-			System.out.println("IO exception. Aborted. Details:");
+			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
 		}
 	}
@@ -33,7 +33,7 @@ public class Server extends NetObject {
 			serverSocket.close();
 			return true;
 		} catch (IOException e) {
-			System.out.println("IO exception. Aborted. Details:");
+			System.err.println("IO exception. Aborted. Details:");
 			e.printStackTrace();
 		}
 		return false;

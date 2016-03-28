@@ -1,9 +1,8 @@
 package com.polytech.pong.network;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -14,27 +13,30 @@ public abstract class NetObject {
 	
 	protected Socket connectionSocket;
 	
-	public String getMessage(){
+	public Object getMessage(){
 		try{
-			BufferedReader in = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-			return in.readLine();
+			ObjectInputStream in = new ObjectInputStream(connectionSocket.getInputStream());
+			return in.readObject();
 		} catch(UnknownHostException e){
-			System.out.println("Unknown host. Aborted. Details:");
+			System.err.println("Unknown host. Aborted. Details:");
 		} catch (IOException e) {
-			System.out.println("IO exception. Aborted. Details:");
+			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
-        }
+        } catch (ClassNotFoundException e) {
+        	System.err.println("Class not founded. Aborted. Details:");
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
-	public boolean sendMessage(String message){
+	public boolean sendMessage(Object message){
 		try{
-			PrintWriter out = new PrintWriter(connectionSocket.getOutputStream());
-			out.println(message);
+			ObjectOutputStream out = new ObjectOutputStream(connectionSocket.getOutputStream());
+			out.writeObject(message);
 			out.flush();
 			return true;
 		} catch (IOException e) {
-			System.out.println("IO exception. Aborted. Details:");
+			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
         }
 		return false;

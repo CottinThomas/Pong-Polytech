@@ -3,6 +3,7 @@ package com.polytech.pong.component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
@@ -11,7 +12,8 @@ import java.util.StringJoiner;
  * @author Clément
  *
  */
-public class Ball {
+@SuppressWarnings("serial")
+public class Ball implements Serializable{
 
 	public static final int BALLE_SIZE = 15;
 	private static final int MIN_SPEAD = 7;
