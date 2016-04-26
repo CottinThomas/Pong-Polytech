@@ -11,6 +11,8 @@ import com.polytech.pong.GameStatus;
 
 public abstract class NetObject {
 	
+	public static final int PORT = 8092;
+	
 	protected Socket connectionSocket;
 	
 	public Object getMessage(){
@@ -56,6 +58,10 @@ public abstract class NetObject {
 	public void debug(String message){
 		if(Application.STATUS == GameStatus.DEBUG)
 			System.out.println("[DEBUG] "+message);
+	}
+	
+	public void sendCloseMessage(){
+		sendMessage(new Boolean(false));
 	}
 
 }

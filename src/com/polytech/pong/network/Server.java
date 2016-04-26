@@ -3,17 +3,18 @@ package com.polytech.pong.network;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class Server extends NetObject {
+public class Server extends NetObject{
 	
 	private ServerSocket serverSocket;
 	
 	public Server(){
 		super();
 		try {
-			serverSocket = new ServerSocket(8095);
-			super.debug("Waiting for connection.");
+			debug("Creating new socket on port "+PORT);
+			serverSocket = new ServerSocket(PORT);
+			debug("Waiting for connection.");
 			connectionSocket = serverSocket.accept();
-			super.debug("Estabished connection.");
+			debug("Estabished connection.");
 		} catch (IOException e){
 			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
@@ -37,6 +38,25 @@ public class Server extends NetObject {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static void main(String[] args) {
+		Server server = new Server();
+		new Thread(new Client(server.connectionSocket)).start();
+		boolean stop = false;
+		while(!stop){
+			Object message = server.getMessage();
+			if(message instanceof Boolean){
+				if(!(Boolean)message){
+					server.closeConnection();
+					server.debug("Connection stoped by client");
+					stop = true;
+				}
+			}
+			if(!server.connectionSocket.isClosed()){
+				server.sendMessage("Bonjour");
+			}
+		}
 	}
 
 }
