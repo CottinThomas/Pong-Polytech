@@ -18,7 +18,7 @@ import com.polytech.pong.ui.CustomJTextField;
 
 /**
  * View to join a hosted game
- * @author Clément
+ * @author Clï¿½ment
  *
  */
 public class JoinBoard extends ABoard {
@@ -50,7 +50,7 @@ public class JoinBoard extends ABoard {
 	    constraints.gridx = 0;
 	    constraints.gridy = 0;
 	    constraints.insets = new Insets(7, 7, 7, 7);
-	    CustomJTextField txf_hostIp = new CustomJTextField("127.0.0.1");
+	    final CustomJTextField txf_hostIp = new CustomJTextField("127.0.0.1");
 	    pnl_mainPanel.add(txf_hostIp, constraints);
 	    
 	    // Join button
