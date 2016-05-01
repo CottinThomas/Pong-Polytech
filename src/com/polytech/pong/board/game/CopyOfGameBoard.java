@@ -16,121 +16,45 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import com.polytech.pong.Application;
-import com.polytech.pong.IServerEvent;
-import com.polytech.pong.ServerHandler;
 import com.polytech.pong.board.ABoard;
-import com.polytech.pong.board.game.EndGameBoard.EGameEndStatus;
 import com.polytech.pong.component.Ball;
 import com.polytech.pong.component.Ball.EAngle;
 import com.polytech.pong.component.Paddle;
-import com.polytech.pong.network.IServerStatus.EServerStatus;
-import com.polytech.pong.network.message.MasterMessage;
-import com.polytech.pong.network.message.SlaveMessage;
 
 // TODO : Mirror ball position for the opponent ?
 // TODO : Transmit server received information;
 
 @SuppressWarnings("serial")
-public class GameBoard extends ABoard
+public class CopyOfGameBoard extends ABoard
 {
 
 	private Paddle playerPaddle;
 	private Paddle opponentPaddle;
 	private Ball ball;
 	private int nbCollision;
-	private int playerScore;
-	private int opponentScore;
-	private JLabel lbl_playerScore;
-	private JLabel lbl_opponentScore;
-	private ServerHandler serverHandler;
-	private Timer timer;
-	private boolean goal;
+	private JLabel playerScore;
+	private JLabel opponentScore;
 
-	public GameBoard(Application application)
+	public CopyOfGameBoard(Application application)
 	{
 		super(application);
 
 		setBackground(Color.BLACK);
 		setLayout(null);
-		
-		serverHandler = application.getServerHandler();
 
-		if(serverHandler.isServerHost())
-		{
-			System.err.println("MASTER");
-			configureAsMaster();
-		}
-		else
-		{
-			configureAsSlave();
-		}
+		nbCollision = 0;
 
-		addPlayerPaddleMouseMoveListener();
-		resetGame();
-		startAnimation();
-	}
-	
-	private void configureAsSlave()
-	{
-		opponentPaddle = new Paddle(new Point(40, Application.GAME_CONTENT_HEIGHT / 2));
-		playerPaddle = new Paddle(
-				new Point(Application.GAME_CONTENT_WIDTH - 40, Application.GAME_CONTENT_HEIGHT / 2));
-		ball = new Ball(new Point(Application.GAME_CONTENT_WIDTH / 2, Application.GAME_CONTENT_HEIGHT / 2));
-		
-		serverHandler.addServerEvent(new IServerEvent() {
-			
-			@Override
-			public void notifyServerStatus(EServerStatus status) {
-
-			}
-			
-			@Override
-			public void notifyMessageReceived(Object message) {
-				if(message instanceof MasterMessage)
-				{
-					MasterMessage masterMessage = (MasterMessage) message;
-					ball = masterMessage.getBall();
-					opponentPaddle = masterMessage.getMasterPaddle();
-					
-					if(opponentScore != masterMessage.getMasterPoint() || playerScore != masterMessage.getSlavePoint())
-					{
-						opponentScore = masterMessage.getMasterPoint();
-						playerScore = masterMessage.getSlavePoint();
-						displayScore(playerScore, opponentScore);
-					}
-					
-					
-				}
-			}
-		});
-	}
-	
-	private void configureAsMaster()
-	{
 		playerPaddle = new Paddle(new Point(40, Application.GAME_CONTENT_HEIGHT / 2));
 		opponentPaddle = new Paddle(
 				new Point(Application.GAME_CONTENT_WIDTH - 40, Application.GAME_CONTENT_HEIGHT / 2));
 		ball = new Ball(new Point(Application.GAME_CONTENT_WIDTH / 2, Application.GAME_CONTENT_HEIGHT / 2));
-		
-		nbCollision = 0;
-		ball.setDirection(Application.GAME_LEFT_DIRECTION);
-		
-		serverHandler.addServerEvent(new IServerEvent() {
-			
-			@Override
-			public void notifyServerStatus(EServerStatus status) {
-			}
-			
-			@Override
-			public void notifyMessageReceived(Object message) {
 
-				if(message instanceof SlaveMessage)
-				{
-					SlaveMessage slaveMessage = (SlaveMessage) message;
-					opponentPaddle = slaveMessage.getSlavePaddle();
-				}
-			}
-		});
+		// TODO : Remove ball test conf
+		ball.setDirection(Application.GAME_LEFT_DIRECTION);
+
+		displayScore(0, 0);
+		addPlayerPaddleMouseMoveListener();
+		startAnimation();
 	}
 
 	@Override
@@ -162,7 +86,7 @@ public class GameBoard extends ABoard
 	public static void main(String[] args)
 	{
 		Application application = new Application();
-		application.switchBoard(new GameBoard(application));
+		application.switchBoard(new CopyOfGameBoard(application));
 		
 		
 
@@ -186,10 +110,30 @@ public class GameBoard extends ABoard
 				{
 					playerPaddle.setY(mouseY);
 				}
-				
-				if(!serverHandler.isServerHost())
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e)
+			{
+			}
+		});
+
+		// TODO : remove after network implementation
+		addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseMoved(MouseEvent e)
+			{
+				int mouseY = e.getY();
+				if (mouseY < Paddle.PADDLE_HEIGHT / 2)
 				{
-					serverHandler.getServer().sendMessage(new SlaveMessage(playerPaddle));
+					opponentPaddle.setY(Paddle.PADDLE_HEIGHT / 2);
+				} else if (mouseY > Application.GAME_CONTENT_HEIGHT - Paddle.PADDLE_HEIGHT / 2)
+				{
+					opponentPaddle.setY(Application.GAME_CONTENT_HEIGHT - Paddle.PADDLE_HEIGHT / 2);
+				} else
+				{
+					opponentPaddle.setY(mouseY);
 				}
 			}
 
@@ -206,21 +150,17 @@ public class GameBoard extends ABoard
 			public void actionPerformed(ActionEvent ae)
 			{
 				// TODO : Remove after server implementation
-				if(application.getServerHandler().isServerHost())
-				{
-					if(!goal)
-					{
-						computeAnimations();
-					}
-					serverHandler.getServer().sendMessage(new MasterMessage(playerScore, opponentScore, playerPaddle, ball));
-				}
+//				if(application.getServerHandler().isServerHost())
+//				{
+//					computeAnimations();
+//				}
 				
-
+				computeAnimations();
 				repaint();
 			}
 		};
 
-		timer = new Timer(5, animate);
+		Timer timer = new Timer(15, animate);
 		timer.start();
 	}
 
@@ -286,101 +226,40 @@ public class GameBoard extends ABoard
 		// TODO : if point, reset ball + notification
 		if (ballPosition.x - Ball.BALLE_SIZE / 2 <= 0)
 		{
-			opponentScore++;
+			System.err.println("point for opponent");
 			ball.setPosition(new Point(Application.GAME_CONTENT_WIDTH / 2, Application.GAME_CONTENT_HEIGHT / 2));
 			ball.setDirection(Application.GAME_LEFT_DIRECTION);
 			ball.setAngle(EAngle.CENTER);
-			resetGame();
 		} else if (ballPosition.x + Ball.BALLE_SIZE / 2 >= Application.GAME_CONTENT_WIDTH)
 		{
-			playerScore++;
+			System.err.println("point for player");
 			ball.setPosition(new Point(Application.GAME_CONTENT_WIDTH / 2, Application.GAME_CONTENT_HEIGHT / 2));
 			ball.setDirection(Application.GAME_RIGHT_DIRECTION);
 			ball.setAngle(EAngle.CENTER);
-			resetGame();
 		}
 	}
 
 	private void displayScore(int playerNbPoint, int opponentNbPoint)
 	{
-		if (lbl_playerScore == null)
+		if (playerScore == null)
 		{
-			lbl_playerScore = new JLabel();
-			lbl_playerScore.setFont(new Font("SansSerif", Font.BOLD, 40));
-			lbl_playerScore.setBounds((Application.GAME_CONTENT_WIDTH / 8) * 3, 0, 100, 100);
-			lbl_playerScore.setForeground(Color.WHITE);
-			add(lbl_playerScore);
+			playerScore = new JLabel();
+			playerScore.setFont(new Font("SansSerif", Font.BOLD, 40));
+			playerScore.setBounds((Application.GAME_CONTENT_WIDTH / 8) * 3, 0, 100, 100);
+			playerScore.setForeground(Color.WHITE);
+			add(playerScore);
 		}
-		if (lbl_opponentScore == null)
+		if (opponentScore == null)
 		{
-			lbl_opponentScore = new JLabel();
-			lbl_opponentScore.setFont(new Font("SansSerif", Font.BOLD, 40));
-			lbl_opponentScore.setBounds((Application.GAME_CONTENT_WIDTH / 8) * 5, 0, 100, 100);
-			lbl_opponentScore.setForeground(Color.WHITE);
-			add(lbl_opponentScore);
+			opponentScore = new JLabel();
+			opponentScore.setFont(new Font("SansSerif", Font.BOLD, 40));
+			opponentScore.setBounds((Application.GAME_CONTENT_WIDTH / 8) * 5, 0, 100, 100);
+			opponentScore.setForeground(Color.WHITE);
+			add(opponentScore);
 		}
-		
-		if(serverHandler.isServerHost())
-		{
-			lbl_playerScore.setText(Integer.toString(playerNbPoint));
-			lbl_opponentScore.setText(Integer.toString(opponentNbPoint));
-		}
-		else
-		{
-			lbl_playerScore.setText(Integer.toString(opponentNbPoint));
-			lbl_opponentScore.setText(Integer.toString(playerNbPoint));
-		}
-		
-		checkGameEnd();
 
+		playerScore.setText(Integer.toString(playerNbPoint));
+		opponentScore.setText(Integer.toString(opponentNbPoint));
 
 	}
-	
-	private void checkGameEnd()
-	{
-		if(playerScore >= Application.POINTS_TO_WIN)
-		{
-			if(serverHandler.isServerHost())
-			{
-				serverHandler.getServer().sendMessage(new MasterMessage(playerScore, opponentScore, playerPaddle, ball));
-			}
-			timer.stop();
-			application.switchBoard(new EndGameBoard(application, EGameEndStatus.VICOTRY));
-		}
-		else if(opponentScore >= Application.POINTS_TO_WIN)
-		{
-			if(serverHandler.isServerHost())
-			{
-				serverHandler.getServer().sendMessage(new MasterMessage(playerScore, opponentScore, playerPaddle, ball));
-			}
-			timer.stop();
-			application.switchBoard(new EndGameBoard(application, EGameEndStatus.DEFEAT));
-		}
-	}
-	
-	private void resetGame()
-	{
-		displayScore(playerScore, opponentScore);
-		nbCollision = 0;
-		ball.setSpeed(0);
-		
-		goal = true;
-		Thread waiting = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(2000);
-					goal = false;
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		waiting.start();
-	}
-
-	
 }

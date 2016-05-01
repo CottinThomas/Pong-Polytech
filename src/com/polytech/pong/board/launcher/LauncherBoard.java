@@ -24,7 +24,7 @@ import com.polytech.pong.ui.CustomJButton;
 /**
  * Main application view
  * 
- * @author Clément
+ * @author Clï¿½ment
  *
  */
 public class LauncherBoard extends ABoard {
@@ -122,10 +122,32 @@ public class LauncherBoard extends ABoard {
 		constraints.gridy = 2;
 		constraints.gridwidth = 3;
 		constraints.insets = new Insets(60, 10, 30, 10);
-		JLabel footer = new JLabel("Polytech' Paris-Sud - APP3 INFO - Thomas Cottin & Clément Garin");
-		footer.setForeground(Color.WHITE);
-		footer.setAlignmentX(CENTER_ALIGNMENT);
-		pnl_mainPanel.add(footer, constraints);
+		JLabel footerName = new JLabel("Thomas Cottin & ClÃ©ment Garin");
+		footerName.setForeground(Color.WHITE);
+		footerName.setAlignmentX(CENTER_ALIGNMENT);
+		pnl_mainPanel.add(footerName, constraints);
+		
+		constraints.fill = GridBagConstraints.CENTER;
+		constraints.weightx = 0.5;
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		constraints.gridwidth = 3;
+		constraints.insets = new Insets(0, 10, 1, 10);
+		JLabel footerSchool = new JLabel("Polytech' Paris-Sud - APP3 INFO");
+		footerSchool.setForeground(Color.WHITE);
+		footerSchool.setAlignmentX(CENTER_ALIGNMENT);
+		pnl_mainPanel.add(footerSchool, constraints);
+		
+		constraints.fill = GridBagConstraints.CENTER;
+		constraints.weightx = 0.5;
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		constraints.gridwidth = 3;
+		constraints.insets = new Insets(0, 10, 20, 10);
+		JLabel footerYear = new JLabel("2015 - 2016");
+		footerYear.setForeground(Color.WHITE);
+		footerYear.setAlignmentX(CENTER_ALIGNMENT);
+		pnl_mainPanel.add(footerYear, constraints);
 
 		add(pnl_mainPanel, BorderLayout.CENTER);
 	}

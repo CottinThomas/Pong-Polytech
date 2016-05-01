@@ -29,8 +29,11 @@ public class EndGameBoard extends ABoard {
 	public EndGameBoard(Application application, EGameEndStatus status) {
 		super(application);
 		this.status = status;
+		
 
 		initMMI();
+		
+		application.getServerHandler().stopServer();
 	}
 
 	private void initMMI() {
@@ -86,11 +89,6 @@ public class EndGameBoard extends ABoard {
 		});
 		
 		this.add(btn_host, constraints);
-	}
-
-	public static void main(String[] args) {
-		Application application = new Application();
-		application.switchBoard(new EndGameBoard(application, EGameEndStatus.VICOTRY));
 	}
 
 }

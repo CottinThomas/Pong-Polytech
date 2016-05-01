@@ -3,25 +3,36 @@ package com.polytech.pong.network;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.polytech.pong.Application;
 import com.polytech.pong.GameStatus;
 
-public abstract class NetObject {
+public abstract class NetObject extends Thread{
 	
 	public static final int PORT = 8092;
 	
 	protected Socket connectionSocket;
-	protected MessageHandler messageHandler;
+	protected List<IServerStatus> subscribers;
+	
+	public NetObject() {
+		subscribers = new ArrayList<>();
+	}
+	
 	
 	public Object getMessage(Object message){
+		
+		for(IServerStatus subscriber : subscribers)
+		{
+			subscriber.notifyMessageReceived(message);
+		}
+		
+		
 		if(message instanceof String){
 			debug(message.toString());
-			if(message.toString().equals("close")){
-				debug("Received close connection message");
-				this.closeConnection();
-			}
 		}
+		
 		return message;
 	}
 	
@@ -40,6 +51,7 @@ public abstract class NetObject {
 		return false;
 	}
 	
+	// TODO : Check behavior
 	public boolean closeConnection(){
 		try {
 			connectionSocket.close();
@@ -56,8 +68,19 @@ public abstract class NetObject {
 			System.out.println("[DEBUG] "+message);
 	}
 	
+	// TODO : Check utility
 	public void sendCloseMessage(){
 		sendMessage("close");
+	}
+	
+	public void addServerStatusListener(IServerStatus listener)
+	{
+		subscribers.add(listener);
+	}
+	
+	public void removeServerStatusListener(IServerStatus listener)
+	{
+		subscribers.remove(listener);
 	}
 
 }

@@ -11,7 +11,7 @@ import com.polytech.pong.board.launcher.LauncherBoard;
 
 /**
  * Main class. Contain "board" to display game content
- * @author Clément
+ * @author Clï¿½ment
  *
  */
 @SuppressWarnings("serial")
@@ -23,6 +23,7 @@ public class Application extends JFrame{
 	public static final int GAME_CONTENT_HEIGHT = 500;
 	public static final int GAME_LEFT_DIRECTION = -1;
 	public static final int GAME_RIGHT_DIRECTION = 1;
+	public static final int POINTS_TO_WIN = 5;
 	
 	private ServerHandler serverHandler;
 	private ABoard currentBoard;
@@ -89,6 +90,7 @@ public class Application extends JFrame{
 	
 	public static void main(String[] args) {
 		new Application();
+//		new Application();
 	}
 	
 }

@@ -9,15 +9,15 @@ import java.util.StringJoiner;
 /**
  * Ball implementation
  * 
- * @author Clément
+ * @author Clï¿½ment
  *
  */
 @SuppressWarnings("serial")
 public class Ball implements Serializable{
 
 	public static final int BALLE_SIZE = 15;
-	private static final int MIN_SPEAD = 7;
-	private static final int MAX_SPEAD = 25;
+	private static final int MIN_SPEAD = 2;
+	private static final int MAX_SPEAD = 7;
 
 	public static enum EAngle {
 		SOUTH, CENTER, NORTH
@@ -86,7 +86,7 @@ public class Ball implements Serializable{
 		}
 
 		// Generate new y translation used in the move() method
-		tranlateY = Math.random() * (5 - 2) + 1;
+		tranlateY = Math.random() * (3 - 1) + 1;
 	}
 
 	public void setSpeed(int newSpeed) {

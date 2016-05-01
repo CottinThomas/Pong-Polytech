@@ -13,7 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.polytech.pong.Application;
+import com.polytech.pong.IServerEvent;
 import com.polytech.pong.board.ABoard;
+import com.polytech.pong.network.IServerStatus.EServerStatus;
 import com.polytech.pong.ui.CustomJButton;
 
 public class WaitingPlayerBoard extends ABoard {
@@ -26,16 +28,41 @@ public class WaitingPlayerBoard extends ABoard {
 	private JLabel lbl_waiting;
 	private String waitingText;
 	private String hostIp;
+	private IServerEvent serverEvent;
 
-	public WaitingPlayerBoard(Application application, String ip) {
+	public WaitingPlayerBoard(final Application application, String ip) {
 		super(application);
 		hostIp = ip;
+
+		serverEvent = new IServerEvent() {
+			
+			@Override
+			public void notifyServerStatus(EServerStatus status) {
+				if(status == EServerStatus.CONNECTED)
+				{
+					// Stopping thread
+					if (waitingThread != null && waitingThread.isAlive())
+						;
+					{
+						waitingThread.interrupt();
+					}
+
+					application.getServerHandler().removeServerEvent(serverEvent);
+					application.switchBoard(new GameBoard(application));
+				}				
+			}
+			
+			@Override
+			public void notifyMessageReceived(Object message) {				
+			}
+		};
 		
 		// host
 		if(ip == null || ip.isEmpty())
 		{
 			waitingText = HOST_WAITING_TEXT;
 			hostIp = application.getServerHandler().createServer();
+			System.err.println(hostIp);
 		}
 		// slave
 		else
@@ -44,9 +71,11 @@ public class WaitingPlayerBoard extends ABoard {
 			application.getServerHandler().createServer(ip);
 		}
 		
-
+		application.getServerHandler().addServerEvent(serverEvent);
+		
 		initMMI();
 		launchWaitingThread();
+		
 
 	}
 
@@ -77,6 +106,7 @@ public class WaitingPlayerBoard extends ABoard {
 			constraints.weightx = 0.5;
 			constraints.gridx = 0;
 			constraints.gridy = 1;
+			System.err.println(hostIp);
 			JLabel lbl_ip = new JLabel("Hosting on address : " + hostIp); 
 			lbl_ip.setForeground(Color.WHITE);
 			pnl_mainPanel.add(lbl_ip, constraints);
@@ -100,6 +130,7 @@ public class WaitingPlayerBoard extends ABoard {
 					waitingThread.interrupt();
 				}
 
+				application.getServerHandler().stopServer();
 				application.switchBoard(application.getPreviousBoard());
 			}
 		});
