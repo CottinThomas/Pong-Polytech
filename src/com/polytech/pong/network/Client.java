@@ -2,14 +2,15 @@ package com.polytech.pong.network;
 
 import java.net.Socket;
 
-public class Client extends NetObject implements Runnable{
+public class Client extends NetObject{
 	
-	public Client(Socket socket){
+	public Client(String ip, int port){
 		super();
 		try{
-			debug("Trying to connect to "+socket.getInetAddress().toString()+":"+socket.getPort());
-			connectionSocket = socket;
+			debug("Trying to connect to "+ip+":"+port);
+			connectionSocket = new Socket(ip, port);
 			debug("Connected !");
+			new Thread(super.messageHandler = new MessageHandler(this)).start();
 		} catch (Exception e) {
 			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
@@ -21,30 +22,14 @@ public class Client extends NetObject implements Runnable{
 		message = "[CLIENT] "+message;
 		super.debug(message);
 	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public static void main(String[] args) throws Exception{
-		Client client = new Client(new Socket("localhost", PORT));
-		int i = 0;
-		while(i<10){
-			client.sendMessage(null);
-			Object message = client.getMessage();
-			if(message instanceof String)
-				client.debug("Message recu : "+message.toString());
-			else if(message instanceof Boolean){
-				if(!(Boolean)message){
-					client.closeConnection();
-					client.debug("Connection stoped by server");
-				}
-			}
-			i++;
+		Client client = new Client("127.0.0.1",NetObject.PORT);
+		for(int i = 0; i < 10; i++){
+			client.sendMessage("Coucou !");
 		}
 		client.sendCloseMessage();
 		client.closeConnection();
+		client.debug("I closed the connection.");
 	}
 }

@@ -15,6 +15,7 @@ public class Server extends NetObject{
 			debug("Waiting for connection.");
 			connectionSocket = serverSocket.accept();
 			debug("Estabished connection.");
+			new Thread(super.messageHandler = new MessageHandler(this)).start();
 		} catch (IOException e){
 			System.err.println("IO exception. Aborted. Details:");
         	e.printStackTrace();
@@ -42,21 +43,12 @@ public class Server extends NetObject{
 	
 	public static void main(String[] args) {
 		Server server = new Server();
-		new Thread(new Client(server.connectionSocket)).start();
-		boolean stop = false;
-		while(!stop){
-			Object message = server.getMessage();
-			if(message instanceof Boolean){
-				if(!(Boolean)message){
-					server.closeConnection();
-					server.debug("Connection stoped by client");
-					stop = true;
-				}
-			}
-			if(!server.connectionSocket.isClosed()){
-				server.sendMessage("Bonjour");
-			}
-		}
+		server.debug("Envoi du message Bonjour au client");
+		boolean open = true;
+		while(open)
+			open = server.sendMessage("Bonjour");
+		server.messageHandler = null;
+		server.debug("The connection socket is closed");
 	}
 
 }
