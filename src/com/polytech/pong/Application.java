@@ -23,7 +23,7 @@ public class Application extends JFrame{
 	public static final int GAME_CONTENT_HEIGHT = 500;
 	public static final int GAME_LEFT_DIRECTION = -1;
 	public static final int GAME_RIGHT_DIRECTION = 1;
-	public static final int POINTS_TO_WIN = 5;
+	public static final int POINTS_TO_WIN = 3;
 	
 	private ServerHandler serverHandler;
 	private ABoard currentBoard;

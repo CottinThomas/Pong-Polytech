@@ -45,15 +45,33 @@ public class GameBoard extends ABoard
 	private ServerHandler serverHandler;
 	private Timer timer;
 	private boolean goal;
+	private Application applicationD;
 
 	public GameBoard(Application application)
 	{
 		super(application);
+		this.applicationD = application;
 
 		setBackground(Color.BLACK);
 		setLayout(null);
 		
+		IServerEvent serverEvent = new IServerEvent() {
+			
+			@Override
+			public void notifyServerStatus(EServerStatus status) {
+				if(status == EServerStatus.DISCONNECTED)
+				{
+					applicationD.switchBoard(new EndGameBoard(applicationD, EGameEndStatus.CONNECTION_LOST));
+				}				
+			}
+			
+			@Override
+			public void notifyMessageReceived(Object message) {				
+			}
+		};
+		
 		serverHandler = application.getServerHandler();
+		serverHandler.addServerEvent(serverEvent);
 
 		if(serverHandler.isServerHost())
 		{
@@ -159,15 +177,6 @@ public class GameBoard extends ABoard
 		g2d.dispose();
 	}
 
-	public static void main(String[] args)
-	{
-		Application application = new Application();
-		application.switchBoard(new GameBoard(application));
-		
-		
-
-	}
-
 	private void addPlayerPaddleMouseMoveListener()
 	{
 		addMouseMotionListener(new MouseMotionListener() {
@@ -255,11 +264,11 @@ public class GameBoard extends ABoard
 			if (collision > 0)
 			{
 				translation = collision;
-				ball.setAngle(EAngle.NORTH, translation / 20);
+				ball.setAngle(EAngle.NORTH, translation / 30);
 			} else if (collision < 0)
 			{
 				translation = collision;
-				ball.setAngle(EAngle.SOUTH, -translation / 20);
+				ball.setAngle(EAngle.SOUTH, -translation / 30);
 			} else
 			{
 				ball.setAngle(EAngle.CENTER);
@@ -268,7 +277,7 @@ public class GameBoard extends ABoard
 			nbCollision++;
 		}
 
-		ball.setSpeed(nbCollision / 2);
+		ball.setSpeed(1 + (nbCollision / 4));
 	}
 
 	private void manageEdgeCollision(Point ballPosition)

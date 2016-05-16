@@ -45,8 +45,7 @@ public abstract class NetObject extends Thread{
 			out.flush();
 			return true;
 		} catch (IOException e) {
-			System.err.println("IO exception. Aborted. Details:");
-        	e.printStackTrace();
+			System.err.println("IO exception. Aborted. Details:" + e.getMessage());
         }
 		return false;
 	}

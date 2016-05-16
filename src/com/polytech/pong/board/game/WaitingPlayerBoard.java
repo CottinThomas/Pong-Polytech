@@ -62,7 +62,6 @@ public class WaitingPlayerBoard extends ABoard {
 		{
 			waitingText = HOST_WAITING_TEXT;
 			hostIp = application.getServerHandler().createServer();
-			System.err.println(hostIp);
 		}
 		// slave
 		else
@@ -106,7 +105,6 @@ public class WaitingPlayerBoard extends ABoard {
 			constraints.weightx = 0.5;
 			constraints.gridx = 0;
 			constraints.gridy = 1;
-			System.err.println(hostIp);
 			JLabel lbl_ip = new JLabel("Hosting on address : " + hostIp); 
 			lbl_ip.setForeground(Color.WHITE);
 			pnl_mainPanel.add(lbl_ip, constraints);
@@ -159,7 +157,6 @@ public class WaitingPlayerBoard extends ABoard {
 					
 					application.switchBoard(new GameBoard(application));
 				} catch (InterruptedException e) {
-					System.err.println(e);
 				}
 			}
 		});

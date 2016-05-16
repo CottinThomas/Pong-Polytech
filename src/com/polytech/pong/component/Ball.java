@@ -40,7 +40,7 @@ public class Ball implements Serializable{
 		this.position = position;
 		direction = -1;
 		angle = EAngle.CENTER;
-		speed = 10;
+		speed = MIN_SPEAD;
 
 	}
 
